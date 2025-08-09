@@ -4,6 +4,7 @@ import plotly.express as px
 from prophet import Prophet
 from prophet.diagnostics import cross_validation, performance_metrics
 from tabs.static_content import show_static_content
+from path_utils import get_data_path
 
 # --- Page config ---
 st.set_page_config(layout="wide")
@@ -15,10 +16,10 @@ st.markdown("### Air Purifier Market Prioritization Dashboard")
 show_static_content()
 
 # Load datasets
-df = pd.read_csv("data/merged_city_data.csv")
+df = pd.read_csv(get_data_path("data/merged_city_data.csv"))
 df["City"] = df["City"].str.title()
 
-df1 = pd.read_csv("data/citywise_trend.csv")
+df1 = pd.read_csv(get_data_path("data/citywise_trend.csv"))
 df1["month"] = pd.to_datetime(df1["month"])
 df1["year"] = df1["month"].dt.year
 df1["month_name"] = df1["month"].dt.strftime('%b')
@@ -50,10 +51,10 @@ with tab1:
     # -------------------------------
     # Load Datasets
     # -------------------------------
-    df2 = pd.read_csv("data/city_pollutants_aqi_summary.csv")
+    df2 = pd.read_csv(get_data_path("data/city_pollutants_aqi_summary.csv"))
     df2["City"] = df2["City"].str.title()
 
-    df3 = pd.read_csv("data/all_citywise_trend.csv")
+    df3 = pd.read_csv(get_data_path("data/all_citywise_trend.csv"))
     df3["month"] = pd.to_datetime(df3["month"])
     df3["year"] = df3["month"].dt.year
     df3["month_name"] = df3["month"].dt.strftime('%b')
@@ -61,13 +62,13 @@ with tab1:
     df3["area"] = df3["area"].str.title()
     df3["state"] = df3["state"].str.title()
 
-    df_state_avg = pd.read_csv("data/state_avg.csv")
+    df_state_avg = pd.read_csv(get_data_path("data/state_avg.csv"))
     df_state_avg["state"] = df_state_avg["state"].str.title()
 
-    df_disease = pd.read_csv("data/top2_diseases_per_state_with_aqi.csv")
+    df_disease = pd.read_csv(get_data_path("data/top2_diseases_per_state_with_aqi.csv"))
     df_disease["State"] = df_disease["State"].str.title()
 
-    df_ev = pd.read_csv("data/ev.csv")
+    df_ev = pd.read_csv(get_data_path("data/ev.csv"))
     df_ev["State"] = df_ev["State"].str.title()
 
     
@@ -253,7 +254,7 @@ with tab1:
 
 # -------------------- TAB 2: Overview --------------------
 with tab2:
-    composite_df = pd.read_csv("data/composite_score.csv")
+    composite_df = pd.read_csv(get_data_path("data/composite_score.csv"))
 
     # Rename problematic column
     composite_df.rename(columns={"AQI_Rank*": "AQI_Rank"}, inplace=True)
@@ -364,7 +365,7 @@ with tab3:
     # 🔹 Load and prepare data
     @st.cache_data
     def load_data():
-        df = pd.read_csv("data/citywise_trend.csv")  # Must contain: area, month, aqi_value
+        df = pd.read_csv(get_data_path("data/citywise_trend.csv"))  # Must contain: area, month, aqi_value
         df.rename(columns={"area": "City", "month": "Month", "aqi_value": "AQI"}, inplace=True)
         return df
 
@@ -549,4 +550,5 @@ st.markdown(
     </div>
     """,
     unsafe_allow_html=True
+
 )
